@@ -14,9 +14,9 @@ import datetime
 # ─── Configuration ───────────────────────────────────────
 INSTANCE_NAME = "arm-server"
 UBUNTU_VERSION = "24.04"  # OS for the new instance: "24.04" (default), "26.04" or "22.04"
-ARM_OCPUS = 2
-ARM_MEMORY_IN_GBS = 12
-BOOT_VOLUME_SIZE_IN_GBS = 100
+ARM_OCPUS = 1
+ARM_MEMORY_IN_GBS = 6
+BOOT_VOLUME_SIZE_IN_GBS = 200
 RETRY_INTERVAL = 90  # seconds
 # ────────────────────────────────────────────────────────
 
