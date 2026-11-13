@@ -66,7 +66,7 @@ jobs:
         # Any other exit  → script error (e.g. wrong secrets/OCID) → stop the chain
         # timeout 19800s = 330 min, 25 min less than job timeout 355 min (buffer for setup steps)
         id: run_script
-        continue-on-error: true
+        #continue-on-error: true
         env:
           PYTHONUNBUFFERED: "1"
         run: |
@@ -74,6 +74,11 @@ jobs:
           timeout 19800 python oci_retry.py
           code=$?
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          # 超時也視為失敗，以便正確統計
+          if [ "$code" -eq 124 ]; then
+            echo "::warning::Timeout reached (no capacity yet)"
+            exit 124
+          fi
           exit $code
 
       # Relay / disable use the job's built-in GITHUB_TOKEN (no PAT needed):
