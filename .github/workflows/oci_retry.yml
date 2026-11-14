@@ -78,7 +78,6 @@ jobs:
           if [ "$code" -eq 124 ]; then
             echo "::warning::Timeout reached (no capacity yet)"
           fi
-          exit 0
           exit $code
 
       # Relay / disable use the job's built-in GITHUB_TOKEN (no PAT needed):
@@ -101,7 +100,8 @@ jobs:
           echo "Workflow auto-disabled"
 
       - name: Stop chain on script error
-        if: steps.run_script.outcome != 'success' && steps.run_script.outputs.exit_code != '124'
+        #if: steps.run_script.outcome != 'success' && steps.run_script.outputs.exit_code != '124'
+        if: always() && steps.run_script.outcome == 'failure' && steps.run_script.outputs.exit_code != '124'
         env:
           EXIT_CODE: ${{ steps.run_script.outputs.exit_code }}
         run: |
@@ -109,7 +109,8 @@ jobs:
           exit 1
 
       - name: Trigger next Job (seamless relay)
-        if: steps.run_script.outputs.exit_code == '124'
+        #if: steps.run_script.outputs.exit_code == '124'
+        if: always() && steps.run_script.outputs.exit_code == '124'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
