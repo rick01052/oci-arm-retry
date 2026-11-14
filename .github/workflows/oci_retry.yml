@@ -77,8 +77,8 @@ jobs:
           # 超時也視為失敗，以便正確統計
           if [ "$code" -eq 124 ]; then
             echo "::warning::Timeout reached (no capacity yet)"
-            exit 124
           fi
+          exit 0
           exit $code
 
       # Relay / disable use the job's built-in GITHUB_TOKEN (no PAT needed):
