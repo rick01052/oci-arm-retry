@@ -78,13 +78,15 @@ jobs:
           if [ "$code" -eq 124 ]; then
             echo "::warning::Timeout reached (no capacity yet)"
           fi
-          exit $code
+          # exit $code
+          exit 0
 
       # Relay / disable use the job's built-in GITHUB_TOKEN (no PAT needed):
       # workflow_dispatch is an allowed exception to "GITHUB_TOKEN events don't start new runs".
       # curl -f makes the step fail (red) on HTTP errors instead of silently passing.
       - name: Auto-disable workflow on success
-        if: steps.run_script.outcome == 'success'
+        # if: steps.run_script.outcome == 'success'
+        if: steps.run_script.outputs.exit_code == '0'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
